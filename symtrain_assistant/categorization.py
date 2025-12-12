@@ -22,7 +22,6 @@ def cluster_categories(df: pd.DataFrame, text_col: str = "reason_gpt") -> pd.Dat
 
     df["cluster_id"] = clusters
 
-    # Placeholder mapping; after you inspect, rename to meaningful labels.
     cluster_to_label = {i: f"Category_{i}" for i in range(N_CLUSTERS)}
     df["category_txf"] = df["cluster_id"].map(cluster_to_label)
 
