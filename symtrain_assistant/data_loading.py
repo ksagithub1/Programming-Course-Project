@@ -31,7 +31,6 @@ def find_json_files(root: Path = DATA_RAW) -> List[Path]:
 
 
 def load_simulation_from_json(json_path: Path) -> Simulation:
-    # company = folder name two levels up, adjust as needed
     parts = json_path.parts
     try:
         company = parts[-2]
@@ -53,10 +52,8 @@ def load_simulation_from_json(json_path: Path) -> Simulation:
         if text:
             turns.append(DialogueTurn(seq, actor, text))
 
-    # Sort by sequence number just in case
     turns.sort(key=lambda t: t.sequence_number)
 
-    # Merge dialogue text and separate by roles
     merged_lines = []
     customer_lines = []
     agent_lines = []
@@ -65,7 +62,6 @@ def load_simulation_from_json(json_path: Path) -> Simulation:
         line = f"{t.actor}: {t.text}"
         merged_lines.append(line)
 
-        # Adjust actor labels once you inspect the actual JSON
         actor_lower = t.actor.lower()
         if "customer" in actor_lower or "sym" in actor_lower:
             customer_lines.append(t.text)
