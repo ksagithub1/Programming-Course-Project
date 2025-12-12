@@ -13,13 +13,11 @@ def transformer_reason_steps(row: pd.Series) -> Dict[str, any]:
     agent_text = (row.get("agent_text", "") or "").strip()
     merged_text = (row.get("merged_text", "") or "").strip()
 
-    # Reason: first sentence from customer_text if available, else merged_text
     src = customer_text if customer_text else merged_text
     reason = src.split(".")[0].strip()
     if not reason:
         reason = "Customer requested assistance."
 
-    # Steps: split agent_text into sentences; fallback to merged_text if missing
     src_steps = agent_text if agent_text else merged_text
     raw_steps = [
         s.strip()
@@ -27,7 +25,6 @@ def transformer_reason_steps(row: pd.Series) -> Dict[str, any]:
         if s.strip()
     ]
 
-    # Keep only a few short steps
     steps = raw_steps[:6] if raw_steps else ["Assist the customer following standard procedure."]
 
     return {"reason_txf": reason, "steps_txf": steps}
@@ -52,7 +49,6 @@ def run_extraction(df: pd.DataFrame) -> pd.DataFrame:
         txf_reasons.append(reason)
         txf_steps.append(steps)
 
-        # Mirror into GPT fields
         gpt_reasons.append(reason)
         gpt_steps.append(steps)
 
