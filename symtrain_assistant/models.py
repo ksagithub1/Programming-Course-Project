@@ -7,15 +7,13 @@ from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
 
 from .config import EMBEDDING_MODEL_NAME, SUMMARIZATION_MODEL_NAME, OPENAI_MODEL_NAME
 
-# optional: OpenAI client
 try:
     from openai import OpenAI
     _openai_client = OpenAI()
-except Exception:  # library not installed etc.
+except Exception:
     _openai_client = None
 
 
-# Lazy singletons
 _embedding_model = None
 _summarizer_tokenizer = None
 _summarizer_model = None
