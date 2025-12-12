@@ -1,5 +1,6 @@
-#Run this in the integrated terminal: docker build --progress=plain -t symtrain-assistant . 
-# syntax=docker/dockerfile:1
+#Run this in the integrated terminal: docker build -t symtrain-assistant .
+#Then do: docker run --rm -p 8501:8501 -e OPENAI_API_KEY="sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxx" symtrain-assistant , where the OPEN_API key is your API key.
+#When you enter in your api key after running, go to the link: http://localhost:8501
 
 #Creating the base image of lightweight Python.
 FROM python:3.11
@@ -23,4 +24,5 @@ COPY . .
 EXPOSE 8501
 
 #Running the Streamlit app.
+
 CMD ["streamlit", "run", "symtrain_assistant/app.py", "--server.port=8501", "--server.address=0.0.0.0"]
