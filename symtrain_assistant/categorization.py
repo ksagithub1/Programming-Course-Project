@@ -47,7 +47,6 @@ def build_category_classifier(df: pd.DataFrame, text_col: str = "reason_gpt") ->
     """
     Simple KNN classifier on embeddings to quickly predict category from new text.
     """
-    # use GPT categories as ground truth for now
     mask = df["category_gpt"].notna()
     texts = df.loc[mask, text_col].tolist()
     labels = df.loc[mask, "category_gpt"].tolist()
