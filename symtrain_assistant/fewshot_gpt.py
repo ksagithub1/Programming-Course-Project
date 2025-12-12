@@ -17,14 +17,13 @@ def retrieve_fewshot_examples(
 ) -> List[dict]:
     subset = df[df["category_gpt"] == category]
     if subset.empty:
-        subset = df  # fallback to any
+        subset = df
     subset = subset.sample(min(n_examples, len(subset)), random_state=42)
 
     examples = []
     for _, row in subset.iterrows():
         raw_steps = row.get("steps_gpt", [])
 
-        # Normalize steps to a Python list of strings
         if isinstance(raw_steps, np.ndarray):
             steps_list = [str(s) for s in raw_steps.tolist()]
         elif isinstance(raw_steps, (list, tuple)):
@@ -99,17 +98,13 @@ def run_fewshot_pipeline(
     df_labeled: pd.DataFrame,
     knn: KNeighborsClassifier,
 ) -> dict:
-    # 1. Predict category using KNN on embeddings of user_input
     pred_cat = predict_category_knn(user_input, knn)
 
-    # 2. Retrieve few-shot examples from that category
     examples = retrieve_fewshot_examples(df_labeled, pred_cat, n_examples=3)
 
-    # 3. Build prompt and call GPT
     prompt = build_fewshot_prompt(user_input, examples)
     result = call_gpt_json(prompt)
 
-    # 4. Ensure category is set (if GPT omitted or changed)
     if "category" not in result or not result["category"]:
         result["category"] = pred_cat
 
